@@ -18,12 +18,12 @@ function loadGoogleMap() {
   // Create a function to initialize the map
   function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 8,
-      center: { lat: 41.876, lng: -87.624 }
+      zoom: 15,
+      center: { lat: 39.708, lng: -75.121 }
     });
   
     var kmlLayer = new google.maps.KmlLayer({
-      url: 'https://www.veuzz.com/kml/examples.kml',
+      url: 'https://www.google.com/maps/d/u/0/edit?mid=1SVrHcKkeRKkaSeGMJVzFNlPcH46DV5U&usp=sharing',
       map: map
     });
   }
