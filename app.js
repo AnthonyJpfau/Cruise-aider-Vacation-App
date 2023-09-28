@@ -17,14 +17,23 @@ function loadGoogleMap() {
   
   // Create a function to initialize the map
   function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 15,
-      center: { lat: 39.708, lng: -75.121 }
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 39.710744, lng: -75.120208 }, // Centered on Robinson
+      zoom: 15, // Adjust the zoom level as needed
     });
   
-    var kmlLayer = new google.maps.KmlLayer({
-      url: 'https://www.google.com/maps/d/u/0/edit?mid=1cY8AMYYDMCdW4XL7yESpbM5lFf_LI9I&usp=sharing',
-      map: map
+    
+    const kmlUrl = 'rowan_university.kml'; 
+  
+    const kmlLayer = new google.maps.KmlLayer({
+      url: kmlUrl,
+      map: map,
+    });
+    google.maps.event.addListener(kmlLayer, 'status_changed', function() {
+      if (kmlLayer.getStatus() === 'OK') {
+        console.log("KML layer has loaded successfully");
+        // Now you can interact with the Placemarks
+      }
     });
   }
   
