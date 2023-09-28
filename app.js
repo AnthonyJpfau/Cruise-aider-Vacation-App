@@ -23,7 +23,7 @@ function loadGoogleMap() {
     });
   
     var kmlLayer = new google.maps.KmlLayer({
-      url: 'https://www.google.com/maps/d/u/0/edit?mid=1SVrHcKkeRKkaSeGMJVzFNlPcH46DV5U&usp=sharing',
+      url: 'https://www.google.com/maps/d/u/0/edit?mid=1cY8AMYYDMCdW4XL7yESpbM5lFf_LI9I&usp=sharing',
       map: map
     });
   }
