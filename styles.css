@@ -1,0 +1,10 @@
+.State-zoom-container {
+    width: 350px;
+    height: 100px;
+    margin: 20px 0;
+    background-color: darkgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
