@@ -13,7 +13,7 @@ let server = http.createServer(function (req, res) {
   console.log(urlOBJ);
 
   // If the client requests the root path, serve the "index.html" file
-  let requestedFile = urlOBJ.pathname === '/' ? 'index.html' : urlOBJ.pathname;
+  let requestedFile = urlOBJ.pathname === '/' ? 'homepage.html' : urlOBJ.pathname;
 
   fs.readFile(filePath + requestedFile, function(err, data) {
     if (err) {

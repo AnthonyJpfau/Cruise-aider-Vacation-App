@@ -8,3 +8,25 @@
     align-items: center;
     border: 1px solid black;
 }
+
+.Quicklink-container {
+    width: 350px;
+    height: 40px;
+    margin: 20px 0;
+    background-color: azure;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
+
+.homepageDisplay {
+    width: 500px;
+    height: 200px;
+    margin: 20px 0;
+    background-color: darkgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+}
