@@ -16,26 +16,7 @@ function loadGoogleMap() {
   }
   
   // Create a function to initialize the map
-function initMap() {
-    const map = new google.maps.Map(document.getElementById('map'), {
-      center: { lat: 39.710744, lng: -75.120208 }, // Centered on Robinson
-      zoom: 15, // Adjust the zoom level as needed
-    });
-  
-    
-    const kmlUrl = 'rowan_university.kml'; 
-  
-    const kmlLayer = new google.maps.KmlLayer({
-      url: kmlUrl,
-      map: map,
-    });
-    google.maps.event.addListener(kmlLayer, 'status_changed', function() {
-      if (kmlLayer.getStatus() === 'OK') {
-        console.log("KML layer has loaded successfully");
-        // Now you can interact with the Placemarks
-      }
-    });
-}
+
   
   // Call the function to load Google Maps when the page is loaded
   window.onload = loadGoogleMap;
