@@ -27,8 +27,6 @@ app.post('/login', async (req, res) => {
       },
     });
     const data = response.data;
-    console.log('Fetched data from JSONbin:', data);
-
     // Check if user input is received correctly
     console.log('Received username:', username);
     console.log('Received password:', password);
@@ -128,7 +126,19 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.get('/getUsername', (req, res) => {
+  res.send(req.session.username);
+});
 
+app.get('/logout', (req, res) => {
+  // Destroy the session on logout
+  req.session.destroy(err => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('/login');
+  });
+});
 
 
 

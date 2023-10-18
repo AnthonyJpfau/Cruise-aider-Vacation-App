@@ -1,3 +1,7 @@
+fetch('/getUsername')
+  .then(res => res.text())
+  .then(data => username.textContent = data);
+
 // Create a function to load the Google Maps code
 function loadGoogleMap() {
     // Create a <script> element for Google Maps API
