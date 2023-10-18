@@ -33,18 +33,26 @@ app.post('/login', async (req, res) => {
     console.log('Received username:', username);
     console.log('Received password:', password);
 
-    // Find the user in the data
-    const user = data.record.users.find((user) => user.username === username && user.password === password);
+    // Access the 'users' array
+    const users = data.record.users;
 
-    if (user) {
-      // User exists, store the username in the session
-      req.session.username = username;
-      console.log('Login successful');
-      res.redirect('/mapPage.html');
+    if (Array.isArray(users)) {
+      const user = users.find((user) => user.username === username && user.password === password);
+
+      if (user) {
+        // User exists, store the username in the session
+        req.session.username = username;
+        console.log('Login successful');
+        res.redirect('/mapPage.html');
+      } else {
+        // User doesn't exist, send an error message
+        console.log('Login failed');
+        res.status(401).send('User does not exist or incorrect username or password');
+      }
     } else {
-      // User doesn't exist, send an error message
-      console.log('Login failed');
-      res.status(401).send('User does not exist or incorrect username or password');
+      // Handle the case where 'users' is not an array
+      console.log('No users data found or unexpected data structure.');
+      res.status(500).send('Internal server error');
     }
   } catch (error) {
     // Handle errors
@@ -57,6 +65,71 @@ app.post('/login', async (req, res) => {
     res.status(500).send('Internal server error');
   }
 });
+
+
+
+app.post('/register', async (req, res) => {
+  const { username, password, email } = req.body;
+
+  try {
+    // Fetch the existing data from JSONbin.io
+    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+      headers: {
+        'secret-key': JSONBIN_API_KEY,
+      },
+    });
+
+    // Log the request data
+    console.log('Request Data:', response.config);
+
+    const data = response.data;
+
+    // Ensure that the 'users' array exists in the data
+    data.users = data.users || [];
+
+    // Check if the user already exists
+    const userExists = data.users.some(user => user.username === username || user.email === email);
+
+    if (userExists) {
+      // Send an error if the username or email already exists
+      res.status(409).send('Username or email already exists. <br><a href="/">Go back</a>');
+    } else {
+      // Add the new user to the existing data
+      const newUser = {
+        username,
+        password,
+        email,
+      };
+      data.users.push(newUser);
+
+      // Update the data on JSONbin.io
+      await axios.put(`${JSONBIN_BASE_URL}/latest`, data, {
+        headers: {
+          'secret-key': JSONBIN_API_KEY,
+        },
+      });
+
+      // Log the response data
+      console.log('Response Data:', data);
+
+      req.session.username = username;
+      // Redirect to the game page or any other desired page
+      res.redirect('/mapPage.html');
+    }
+  } catch (error) {
+    console.error('Error connecting to JSONbin.io:', error);
+
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
+
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+
 
 
 // Serve static files
