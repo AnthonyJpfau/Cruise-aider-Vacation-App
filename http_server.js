@@ -134,12 +134,14 @@ app.post('/register', async (req, res) => {
 
 // Serve static files
 app.get('/', (req, res) => {
-  // Serve the "homepage.html" file
-  fs.readFile(`${__dirname}/homepage.html`, (err, data) => {
+  // Serve the "homepage.html" file with the correct Content-Type
+  fs.readFile(`${__dirname}/homepage.html`, 'utf8', (err, data) => {
     if (err) {
       console.error('Error reading homepage.html:', err);
       res.status(500).send('Internal server error');
     } else {
+      // Set the Content-Type to text/html
+      res.setHeader('Content-Type', 'text/html');
       res.send(data);
     }
   });
