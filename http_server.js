@@ -1,105 +1,75 @@
-var fs = require('fs');
-var http = require('http');
+const express = require('express');
+const app = express();
+const session = require('express-session');
+const axios = require('axios');
+const fs = require('fs');
 
+const JSONBIN_API_KEY = '$2a$10$P8UeB64FsrRlrItjngXAZO11qSMuLdiaZszplOqDntVoukdimnJ6a'; // Replace with your JSONbin.io API key
+const JSONBIN_BIN_ID = '653008f812a5d376598d6b8a'; // Replace with your JSONbin.io bin ID
+const JSONBIN_BASE_URL = `https://api.jsonbin.io/b/${JSONBIN_BIN_ID}`;
 
-var filePath = "./";
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + '/'));
 
-let server = http.createServer(function (req, res) {
-  console.log(req.headers);
-  let baseURL = 'http://' + req.headers.host;
-  var urlOBJ = new URL(req.url, baseURL);
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+}));
 
-  console.log("Method: " + req.method);
-  console.log(urlOBJ);
-
-  // If the client requests the root path, serve the "homepage.html" file
-  let requestedFile = urlOBJ.pathname === '/' ? 'homepage.html' : urlOBJ.pathname;
-
-  fs.readFile(filePath + requestedFile, function(err, data) {
-    if (err) {
-      res.writeHead(404);
-      res.write("<h1> ERROR 404. FILE NOT FOUND</h1><br><br>");
-      res.end(JSON.stringify(err));
-    }
-    res.writeHead(200);
-    res.end(data);
-  });
-}).listen(3000, ()=>{
-  console.log("Server is running");
-});
-
-/*
 app.post('/login', async (req, res) => {
-  const {username, password} = req.body;
+  const { username, password } = req.body;
 
   try {
-    const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    //replace with our SQL database name v v
-    const db = client.db('battleshipDb');
-    const users = db.collection('users');
+    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+      headers: {
+        'secret-key': JSONBIN_API_KEY,
+      },
+    });
+    const data = response.data;
 
-    const user = await users.findOne({username, password});
+    console.log('Fetched data from JSONbin:', data);
 
-    if(user) {
+    // Check if user input is received correctly
+    console.log('Received username:', username);
+    console.log('Received password:', password);
+
+    // Find the user in the data
+    const user = data.users.find((user) => user.username === username && user.password === password);
+
+    if (user) {
       req.session.username = username;
-      res.redirect('/gamepage.html');
-    
+      console.log('Login successful');
+      res.redirect('/mapPage.html');
     } else {
+      console.log('Login failed');
       res.status(401).send('Incorrect username or password');
     }
-
-    client.close();
   } catch (error) {
-    console.error('Error connecting to the database', error);
+    console.error('Error connecting to JSONbin.io:', error);
+  
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
+  
     res.status(500).send('Internal server error');
   }
 });
 
-Code needs to be modified to Fit SQL database informaion
-
-*/
-/*
-
-app.post('/register', async (req, res) => {
-  const {username, password, email} = req.body;
-
-  try {
-    const client = await MongoClient.connect(uri, { usenewUrlParser: true, useUnifiedTopology: true});
-    const db = client.db('battleshipDb');
-    const users = db.collection('users');
-
-    //insert new user to battleship user collection
-    const existingUser = await users.findOne({ $or: [{username }, { email}] });
-
-    if (existingUser) {
-      //if username or email already exists, send an error
-      res.status(409).send("Username or email already exists. <br><a href='/'>Go back</a>");
-      
+// Serve static files
+app.get('/', (req, res) => {
+  // Serve the "homepage.html" file
+  fs.readFile(`${__dirname}/homepage.html`, (err, data) => {
+    if (err) {
+      console.error('Error reading homepage.html:', err);
+      res.status(500).send('Internal server error');
     } else {
-      const newUser = {
-        username,
-        password,
-        email,
-        wins: 0,
-        losses: 0,
-        totalShipsSunk: 0,
-      };
-      await users.insertOne(newUser);
-      req.session.username = username;
-      client.close();
-      //if username/email doesnt exist Creates account
-      res.redirect('/gamepage.html');
+      res.send(data);
     }
-
-
-
-   
-  } catch(error) {
-    console.error('Error connecting to the database', error);
-    res.status(500).send('Internal Server Error');
-  }
-
+  });
 });
 
-CODE needs to be modifed to fit SQL database information
-*/
+app.listen(3000, () => {
+  console.log('Server is running');
+});
