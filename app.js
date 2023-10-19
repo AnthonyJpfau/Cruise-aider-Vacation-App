@@ -6,7 +6,7 @@ fetch('/getUsername')
 function loadGoogleMap() {
     // Create a <script> element for Google Maps API
     var script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=KEY_GOES_HERE&callback=initMap';
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=initMap';
     script.async = true;
     script.defer = true;
   
@@ -26,7 +26,7 @@ function loadGoogleMap() {
   window.onload = loadGoogleMap;
 
         // Replace 'YOUR_API_KEY' with your actual Google Maps API key
-        const apiKey = 'KEY_GOES_HERE';
+        const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o';
 
         let map;
 
