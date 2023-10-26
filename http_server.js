@@ -103,6 +103,7 @@ app.post('/register', async (req, res) => {
         });
 
         console.log('User registration successful');
+        req.session.username = username;
         res.redirect('/mapPage.html');
       }
     } else {
