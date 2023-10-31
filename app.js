@@ -1,7 +1,24 @@
 fetch('/getUsername')
   .then(res => res.text())
-  .then(data => username.textContent = data);
+  .then(data => {
+    const usernameElem = document.getElementById('username');
+    if (usernameElem) usernameElem.textContent = data;
+  })
+  .catch(error => {
+    console.error('Error fetching username:', error);
+  });
 
+// Fetch the user's group and display it
+fetch('/getUserGroup')
+  .then(res => res.text())
+  .then(data => {
+    const usergroupElem = document.getElementById('usergroup');
+    if (usergroupElem) usergroupElem.textContent = data;
+  })
+  .catch(error => {
+    console.error('Error fetching user group:', error);
+  });
+  
 // Create a function to load the Google Maps code
 function loadGoogleMap() {
     // Create a <script> element for Google Maps API
