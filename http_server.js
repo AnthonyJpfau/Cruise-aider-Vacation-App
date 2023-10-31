@@ -90,7 +90,8 @@ app.post('/register', async (req, res) => {
         users.push({
           username,
           password, // Note: Storing password in plain text is not safe. You should hash it.
-          email
+          email,
+          group: 'friend'
         });
 
         // Update the bin with the new users array directly
@@ -126,6 +127,15 @@ app.post('/register', async (req, res) => {
 app.get('/getUsername', (req, res) => {
   res.send(req.session.username);
 });
+
+app.get('/getUserGroup', (req, res) => {
+  if (req.session.user && req.session.user.group) {
+    res.send(req.session.user.group);
+  } else {
+    res.send('Unknown');
+  }
+});
+
 
 app.get('/logout', (req, res) => {
   // Destroy the session on logout
