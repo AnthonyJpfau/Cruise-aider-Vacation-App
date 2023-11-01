@@ -128,6 +128,9 @@ app.get('/getUsername', (req, res) => {
   res.send(req.session.username);
 });
 
+/*
+The getGroup server get method works by retreiving the express sessions username, and then displaying the users group from JSONBIn
+*/
 app.get('/getGroup', async (req, res) => {
   try {
     // Check if user is logged in
@@ -165,6 +168,38 @@ app.get('/getGroup', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+app.get('/getUsersInSameGroup', async (req, res) => {
+  try {
+    // Check if user is logged in
+    if (!req.session.username) {
+      return res.status(401).send('User not logged in');
+    }
+
+    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+      headers: {
+        'secret-key': JSONBIN_API_KEY
+      }
+    });
+
+    const users = response.data.record.users;
+    const currentUser = users.find(u => u.username === req.session.username);
+
+    if (!currentUser) {
+      return res.status(404).send('Current user not found');
+    }
+
+    // Filter out users that are in the same group as the current user.
+    const usersInSameGroup = users.filter(u => u.group === currentUser.group && u.username !== req.session.username);
+
+    res.json(usersInSameGroup);
+
+  } catch (error) {
+    console.error('Error retrieving users:', error);
+    res.status(500).send('Server error');
+  }
+});
+
 
 
 app.get('/logout', (req, res) => {

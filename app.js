@@ -21,6 +21,31 @@ fetch('/getGroup')
     groupElem.textContent = 'Error fetching group';
   });
 
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('/getUsersInSameGroup')
+    .then(res => res.json())
+    .then(users => {
+      const membersList = document.getElementById('groupMembers');
+
+      if (users.length === 0) {
+        membersList.innerHTML = '<li>No other members in your group.</li>';
+        return;
+      }
+
+      // Populate the list with usernames of the users in the same group.
+      users.forEach(user => {
+        const listItem = document.createElement('li');
+        listItem.textContent = user.username;
+        membersList.appendChild(listItem);
+      });
+
+    })
+    .catch(error => {
+      console.error('Error fetching group members:', error);
+    });
+});
+
+
   
 // Create a function to load the Google Maps code
 function loadGoogleMap() {
