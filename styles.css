@@ -30,3 +30,27 @@
     align-items: center;
     border: 1px solid black;
 }
+
+.welcomeMessage {
+    text-shadow: 5px 5px 14px #000000;
+    color: #ffffff;
+    text-align: center;
+}
+
+.groupMessage {
+    text-shadow: 5px 5px 14px #000000;
+    color: #ffffff;
+    text-align: right;  
+}
+
+.returnButton{
+    text-align: right;
+}
+
+.username{
+    color: White
+}
+
+.email{
+    color: #f36d6d;
+}

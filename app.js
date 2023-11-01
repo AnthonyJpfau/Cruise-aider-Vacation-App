@@ -21,29 +21,42 @@ fetch('/getGroup')
     groupElem.textContent = 'Error fetching group';
   });
 
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('/getUsersInSameGroup')
-    .then(res => res.json())
-    .then(users => {
-      const membersList = document.getElementById('groupMembers');
-
-      if (users.length === 0) {
-        membersList.innerHTML = '<li>No other members in your group.</li>';
-        return;
-      }
-
-      // Populate the list with usernames of the users in the same group.
-      users.forEach(user => {
-        const listItem = document.createElement('li');
-        listItem.textContent = user.username;
-        membersList.appendChild(listItem);
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('/getUsersInSameGroup')
+      .then(res => res.json())
+      .then(users => {
+        const membersList = document.getElementById('groupMembers');
+  
+        if (users.length === 0) {
+          membersList.innerHTML = '<li>No other members in your group.</li>';
+          return;
+        }
+  
+        // Populate the list with usernames and emails of the users in the same group.
+        users.forEach(user => {
+          const listItem = document.createElement('li');
+  
+          // Create a div for the username
+          const usernameDiv = document.createElement('div');
+          usernameDiv.textContent = user.username;
+          usernameDiv.className = 'username';  // Adding a class for potential styling
+          listItem.appendChild(usernameDiv);
+  
+          // Create a div for the email
+          const emailDiv = document.createElement('div');
+          emailDiv.textContent = user.email;
+          emailDiv.className = 'email';  // Adding a class for potential styling
+          listItem.appendChild(emailDiv);
+  
+          // Append the listItem to the members list
+          membersList.appendChild(listItem);
+        });
+  
+      })
+      .catch(error => {
+        console.error('Error fetching group members:', error);
       });
-
-    })
-    .catch(error => {
-      console.error('Error fetching group members:', error);
-    });
-});
+  });
 
 
   

@@ -11,23 +11,25 @@
         #map {
             height: 100vh;
         }
+        html {background-color: #82d1f3;}
+        
     </style>
 </head>
 <body>
-    
+
+  <div class="welcomeMessage"><h2>Welcome to the vacation app, <div id="username"> </div></h2></div>
+
+  <div class="Quicklink-container">
+    <h3><a href="groupPage.html"><button>Groups</button></a></h3>
+    <h3><a href="schedulePage.html"><button>Recommended Locations</button></a></h3>
+    </div>
+
   <div class="State-zoom-container">
     <h3>Zoom to U.S. State</h3>
     <label for="stateInput">Enter a U.S. state:</label>
     <input type="text" id="stateInput" placeholder="E.g., California">
     <button id="zoomButton">Zoom to State</button>
   </div>
-
-  <div class="Quicklink-container">
-  <h3><a href="groupPage.html"><button>Groups</button></a></h3>
-  <h3><a href="schedulePage.html"><button>Recommended Locations</button></a></h3>
-  </div>
-
-  <h2>Welcome to the vacation app, <div id="username"> </div></h2>
 
   <div id="map"></div>
   <script src="app.js"></script>
