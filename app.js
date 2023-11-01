@@ -13,7 +13,7 @@ fetch('/getGroup')
   .then(res => res.text())
   .then(data => {
     const groupElem = document.getElementById('userGroup');
-    if (groupElem) groupElem.textContent = 'Your group: ' + data;
+    if (groupElem) groupElem.textContent = 'Group name: ' + data;
   })
   .catch(error => {
     console.error('Error fetching group:', error);

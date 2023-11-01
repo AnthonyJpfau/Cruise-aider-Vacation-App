@@ -147,14 +147,9 @@ app.get('/getGroup', async (req, res) => {
     });
 
     const data = response.data;
-    console.log("Data from JSONBin:", data);
-    
-
     const userArray = data.record.users; 
-    console.log("User Array:", userArray);
 
     const user = userArray.find(u => u.username === req.session.username);
-    console.log("Found User:", user);
     console.log("Session Username:", req.session.username);
 
     if (!user) {
