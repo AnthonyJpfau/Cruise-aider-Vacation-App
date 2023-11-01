@@ -9,15 +9,18 @@ fetch('/getUsername')
   });
 
 // Fetch the user's group and display it
-fetch('/getUserGroup')
+fetch('/getGroup')
   .then(res => res.text())
   .then(data => {
-    const usergroupElem = document.getElementById('usergroup');
-    if (usergroupElem) usergroupElem.textContent = data;
+    const groupElem = document.getElementById('userGroup');
+    if (groupElem) groupElem.textContent = 'Your group: ' + data;
   })
   .catch(error => {
-    console.error('Error fetching user group:', error);
+    console.error('Error fetching group:', error);
+    const groupElem = document.getElementById('userGroup');
+    groupElem.textContent = 'Error fetching group';
   });
+
   
 // Create a function to load the Google Maps code
 function loadGoogleMap() {

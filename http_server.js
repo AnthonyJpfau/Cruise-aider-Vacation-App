@@ -128,11 +128,41 @@ app.get('/getUsername', (req, res) => {
   res.send(req.session.username);
 });
 
-app.get('/getUserGroup', (req, res) => {
-  if (req.session.user && req.session.user.group) {
-    res.send(req.session.user.group);
-  } else {
-    res.send('Unknown');
+app.get('/getGroup', async (req, res) => {
+  try {
+    // Check if user is logged in
+    if (!req.session.username) {
+      return res.status(401).send('User not logged in');
+    }
+
+    // Get user's information from JSONbin.io
+
+    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+      headers: {
+        'secret-key': JSONBIN_API_KEY
+      }
+    });
+
+    const data = response.data;
+    console.log("Data from JSONBin:", data);
+    
+
+    const userArray = data.record.users; 
+    console.log("User Array:", userArray);
+
+    const user = userArray.find(u => u.username === req.session.username);
+    console.log("Found User:", user);
+    console.log("Session Username:", req.session.username);
+
+    if (!user) {
+      return res.status(404).send('User not found in JSONbin.io');
+    }
+
+    // Return the user's group
+    res.send(user.group);
+  } catch (error) {
+    console.error('Error retrieving group:', error);
+    res.status(500).send('Server error');
   }
 });
 
