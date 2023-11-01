@@ -74,32 +74,91 @@ let map;
 let currentMarker; // This will store the current marker if one exists
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 39.8283, lng: -98.5795 }, // Center of the United States
-        zoom: 4 // Initial zoom level
-    });
+  map = new google.maps.Map(document.getElementById('map'), {
+      center: { lat: 39.8283, lng: -98.5795 }, // Center of the United States
+      zoom: 4 // Initial zoom level
+  });
 
-    // Event listener for map click to show coordinates and place a temporary marker
-    map.addListener('click', function(event) {
-        const clickedLat = event.latLng.lat();
-        const clickedLng = event.latLng.lng();
+  // Event listener for map click to show coordinates and place a temporary marker
+  map.addListener('click', function(event) {
+      const clickedLat = event.latLng.lat();
+      const clickedLng = event.latLng.lng();
 
-        // Remove the previous marker if it exists
-        if (currentMarker) {
-            currentMarker.setMap(null);
-        }
+      // Remove the previous marker if it exists
+      if (currentMarker) {
+          currentMarker.setMap(null);
+      }
 
-        // Place a new marker at the clicked location
-        currentMarker = new google.maps.Marker({
-            position: event.latLng,
-            map: map
-        });
+      // Place a new marker at the clicked location
+      currentMarker = new google.maps.Marker({
+          position: event.latLng,
+          map: map
+      });
 
-        setTimeout(function() {
-          alert('You clicked at: ' + clickedLat + ', ' + clickedLng);
+      // Add an event listener for marker clicks
+      currentMarker.addListener('click', function() {
+          const isConfirmed = confirm('Do you want to send this location to the group?');
+          if (isConfirmed) {
+              sendLocationToGroup(currentMarker.getPosition());
+          }
+      });
+
+      setTimeout(function() {
+          alert('You Marked a location at: ' + clickedLat + ', ' + clickedLng);
       }, 50);  // Delay of 50 milliseconds
   });
 }
+
+function sendLocationToGroup(position) {
+  const binId = '6542ab390574da7622c0b78a'; // Replace with your JSONbin bin ID
+  const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o'; // Replace with your JSONbin API key
+  const apiUrl = `https://api.jsonbin.io/b/${binId}`;
+  const headers = {
+      'Content-Type': 'application/json',
+      'secret-key': apiKey,
+      'versioning': 'false'
+  };
+
+  // First, get the group associated with the logged-in user
+  fetch('/getGroup')
+  .then(res => res.text())
+  .then(userGroup => {
+      // Next, fetch the data from JSONbin
+      return fetch(apiUrl, { headers: headers })
+      .then(response => response.json())
+      .then(data => {
+          const groupToUpdate = data.groups.find(group => group.group === userGroup);
+          if (groupToUpdate) {
+              // Add the new location to the locations array for the group
+              const newLocation = `${position.lat()},${position.lng()}`;
+              groupToUpdate.locations.push(newLocation);
+
+              // Update the JSONbin with the new locations array
+              return fetch(apiUrl, {
+                  method: 'PUT',
+                  headers: headers,
+                  body: JSON.stringify(data)
+              });
+          } else {
+              throw new Error('Group not found.');
+          }
+      })
+  })
+  .then(response => {
+      if (response.ok) {
+          alert('Location added to group successfully!');
+      } else {
+          alert('Failed to update the location.');
+      }
+  })
+  .catch(error => {
+    console.error('Detailed Error:', error.message); // Will print the error message to the console.
+    alert('An error occurred: ' + error.message);
+    console.error('Error retrieving group:', error.response || error);
+});
+}
+
+
 
 document.getElementById('zoomButton').addEventListener('click', () => {
   const stateName = document.getElementById('stateInput').value;
