@@ -9,6 +9,8 @@ fetch('/getUsername')
   });
 
 // Fetch the user's group and display it
+//this is a test comment
+
 fetch('/getGroup')
   .then(res => res.text())
   .then(data => {
