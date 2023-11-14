@@ -87,6 +87,7 @@ const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o';
 
 let map;
 let currentMarker; // This will store the current marker if one exists
+let clickedLat, clickedLng; // Variables to store the latitude and longitude
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
@@ -94,10 +95,11 @@ function initMap() {
       zoom: 4 // Initial zoom level
   });
 
-  // Event listener for map click to show coordinates and place a temporary marker
+  // Event listener for map click
   map.addListener('click', function(event) {
-      const clickedLat = event.latLng.lat();
-      const clickedLng = event.latLng.lng();
+      clickedLat = event.latLng.lat();
+      clickedLng = event.latLng.lng();
+      console.log(clickedLat, clickedLng);
 
       // Remove the previous marker if it exists
       if (currentMarker) {
@@ -114,17 +116,17 @@ function initMap() {
       currentMarker.addListener('click', function() {
           const isConfirmed = confirm('Do you want to send this location to the group?');
           if (isConfirmed) {
-              sendLocationToGroup(currentMarker.getPosition());
+              sendLocationToGroup(clickedLat, clickedLng); // Send the stored lat and lng
           }
       });
 
       setTimeout(function() {
           alert('You Marked a location at: ' + clickedLat + ', ' + clickedLng);
-      }, 50);  // Delay of 50 milliseconds
+      }, 50);
   });
 }
 
-function sendLocationToGroup(position) {
+function sendLocationToGroup(latitude, longitude) {
   const binId = '6542ab390574da7622c0b78a'; // Replace with your JSONbin bin ID
   const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o'; // Replace with your JSONbin API key
   const apiUrl = `https://api.jsonbin.io/b/${binId}`;
@@ -145,7 +147,7 @@ function sendLocationToGroup(position) {
           const groupToUpdate = data.groups.find(group => group.group === userGroup);
           if (groupToUpdate) {
               // Add the new location to the locations array for the group
-              const newLocation = `${position.lat()},${position.lng()}`;
+              const newLocation = `${latitude},${longitude}`;
               groupToUpdate.locations.push(newLocation);
 
               // Update the JSONbin with the new locations array
