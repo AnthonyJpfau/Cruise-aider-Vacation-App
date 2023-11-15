@@ -205,35 +205,59 @@ app.post('/updateGroupLocation', async (req, res) => {
 
   try {
       // Fetch the current data from the bin
-      const currentData = await fetch(`${JSONBIN_BASEGROUP_URL}`, {
+      const response = await fetch(`${JSONBIN_BASEGROUP_URL}`, {
           headers: {
               'secret-key': JSONBIN_API_KEY
           }
-      }).then(res => res.json());
-      console.log(currentData);
+      });
 
-      // Update the data with the new location
-      const groupData = currentData.groups.find(g => g.group === group);
+      if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.statusText}`);
+      }
+
+      const dataWrapper = await response.json();
+
+      // Ensure the record and groups array exist
+      if (!dataWrapper.record || !Array.isArray(dataWrapper.record.groups)) {
+          return res.status(500).send({ message: 'Invalid or missing data' });
+      }
+
+      const groups = dataWrapper.record.groups;
+
+      // Find the group and update its locations
+      const groupData = groups.find(g => g.group === group);
       if (groupData) {
           groupData.locations.push(location);
       } else {
-          // Handle the case where the group does not exist
           return res.status(404).send({ message: 'Group not found' });
       }
 
+      // Prepare the updated data to be sent back
+      const updatedData = {
+          ...dataWrapper,
+          record: { ...dataWrapper.record, groups: groups }
+      };
+
       // Send the updated data back to the bin
-      await fetch(`${JSONBIN_BASEGROUP_URL}`, {
+      console.log('Updated data being sent:', updatedData);
+
+      const updateResponse = await fetch(`${JSONBIN_BASEGROUP_URL}`, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
               'secret-key': JSONBIN_API_KEY
           },
-          body: JSON.stringify(currentData)
+          body: JSON.stringify(updatedData)
       });
+      console.log('Update response:', await updateResponse.text());
+
+      if (!updateResponse.ok) {
+          throw new Error(`Error updating data: ${updateResponse.statusText}`);
+      }
 
       res.send({ message: 'Location updated successfully' });
   } catch (error) {
-      console.error('Error updating location:', error);
+      console.error('Error:', error);
       res.status(500).send({ message: 'Error updating location' });
   }
 });

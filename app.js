@@ -136,7 +136,6 @@ document.getElementById('submitLocation').addEventListener('click', function() {
 });
 
 function updateGroupLocation(userGroup, lat, lng) {
-  // Send the updated location to the server
   const data = {
       group: userGroup,
       location: { lat: lat, lng: lng }
@@ -149,16 +148,20 @@ function updateGroupLocation(userGroup, lat, lng) {
       },
       body: JSON.stringify(data),
   })
-  .then(response => response.json())
+  .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+  })
   .then(data => {
-      console.log('Success:', data);
-      // Handle success response
+      console.log('Response:', data);
   })
   .catch((error) => {
-      console.error('Error:', error);
-      // Handle errors here
+      console.error('Fetch error:', error);
   });
 }
+
 
 
 
