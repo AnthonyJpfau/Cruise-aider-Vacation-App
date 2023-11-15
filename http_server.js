@@ -253,6 +253,53 @@ app.post('/updateGroupLocation', async (req, res) => {
   }
 });
 
+app.get('/getGroupLocations', async (req, res) => {
+  try {
+      // Check if user is logged in
+      if (!req.session.username) {
+          return res.status(401).send('User not logged in');
+      }
+
+      // Get user's information from JSONbin.io
+      const userResponse = await axios.get(`${JSONBIN_BASEUSER_URL}/latest`, {
+          headers: {
+              'secret-key': JSONBIN_API_KEY
+          }
+      });
+
+      const userData = userResponse.data;
+      const userArray = userData.record.users; 
+
+      const user = userArray.find(u => u.username === req.session.username);
+
+      if (!user) {
+          return res.status(404).send('User not found in JSONbin.io');
+      }
+
+      // Fetch the group data from JSON bin
+      const groupResponse = await axios.get(`${JSONBIN_BASEGROUP_URL}/latest`, {
+          headers: {
+              'secret-key': JSONBIN_API_KEY
+          }
+      });
+
+      // Adjusted to correctly access the groups array
+      const groupData = groupResponse.data.record.record.groups;
+      console.log("Groups array:", groupData);
+
+      const userGroup = groupData.find(g => g.group === user.group);
+
+      if (!userGroup) {
+          return res.status(404).send('Group not found');
+      }
+
+      // Send the locations of the user's group to the client
+      res.json(userGroup.locations);
+  } catch (error) {
+      console.error('Error retrieving group locations:', error);
+      res.status(500).send('Server error');
+  }
+});
 
 
 

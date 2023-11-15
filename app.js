@@ -83,10 +83,13 @@ function loadGoogleMap() {
 // Call the function to load Google Maps when the page is loaded
 window.onload = loadGoogleMap;
 
+
+
 // Replace 'YOUR_API_KEY' with your actual Google Maps API key
 const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o';
 
 let map;
+let mapGroup;
 let currentMarker; // This will store the current marker if one exists
 let clickedLat, clickedLng; // Variables to store the latitude and longitude
 
@@ -173,34 +176,43 @@ function updateGroupLocation(userGroup, lat, lng, username) {
   });
 }
 
+
+
 function initMapGroup() {
   mapGroup = new google.maps.Map(document.getElementById('mapGroup'), {
-      center: { lat: 39.8283, lng: -98.5795 }, // Center of the United States
-      zoom: 4 // Initial zoom level
+      center: { lat: 39.8283, lng: -98.5795 },
+      zoom: 4
   });
 
-  // Event listener for mapGroup click
-  mapGroup.addListener('click', function(event) {
-      clickedLatGroup = event.latLng.lat();
-      clickedLngGroup = event.latLng.lng();
-      
-      // Update the display for latitude and longitude for mapGroup
-      document.getElementById('displayLatGroup').innerText = clickedLatGroup;
-      document.getElementById('displayLngGroup').innerText = clickedLngGroup;
-
-      // Remove the previous marker if it exists for mapGroup
-      if (currentMarkerGroup) {
-          currentMarkerGroup.setMap(null);
-      }
-
-      // Place a new marker at the clicked location for mapGroup
-      currentMarkerGroup = new google.maps.Marker({
-          position: event.latLng,
-          map: mapGroup
-      });
-  });
+  // After initializing the map, display the group locations
+  displayGroupLocations(mapGroup);
 }
-
+window.addEventListener("pageshow", function(event) {
+  if (event.persisted) {
+      // The page was restored from the cache
+      initMapGroup();
+  }
+});
+function displayGroupLocations(map) {
+  fetch('/getGroupLocations')
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(locations => {
+          locations.forEach(location => {
+              new google.maps.Marker({
+                  position: location,
+                  map: map
+              });
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching group locations:', error);
+      });
+}
 
 
 document.getElementById('zoomButton').addEventListener('click', () => {
