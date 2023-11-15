@@ -3,10 +3,12 @@ const app = express();
 const session = require('express-session');
 const axios = require('axios');
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 
 const JSONBIN_API_KEY = '$2a$10$z4jAQxdXz5fi5wyxWX3xd..J3pKjUkqNwLR7tIicE0s0tujF4uZ363'; // Replace with your JSONbin.io API key 
-const JSONBIN_BASE_URL = `https://api.jsonbin.io/v3/b/653008f812a5d376598d6b8a`;
+const JSONBIN_BASEUSER_URL = `https://api.jsonbin.io/v3/b/653008f812a5d376598d6b8a`;
+const JSONBIN_BASEGROUP_URL =`https://api.jsonbin.io/v3/b/6542ab390574da7622c0b78a`;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/'));
@@ -22,7 +24,7 @@ app.post('/login', async (req, res) => {
 
   try {
     // Fetch user data from JSONbin.io
-    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+    const response = await axios.get(`${JSONBIN_BASEUSER_URL}/latest`, {
       headers: {
         'secret-key': JSONBIN_API_KEY,
       },
@@ -72,7 +74,7 @@ app.post('/register', async (req, res) => {
 
   try {
     // Fetch current user data from JSONbin.io
-    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+    const response = await axios.get(`${JSONBIN_BASEUSER_URL}/latest`, {
       headers: {
         'secret-key': JSONBIN_API_KEY,
       },
@@ -96,7 +98,7 @@ app.post('/register', async (req, res) => {
         });
 
         // Update the bin with the new users array directly
-        await axios.put(`${JSONBIN_BASE_URL}`, {
+        await axios.put(`${JSONBIN_BASEUSER_URL}`, {
           users: users // Sending the users array directly without wrapping in a record property
         }, {
           headers: {
@@ -141,7 +143,7 @@ app.get('/getGroup', async (req, res) => {
 
     // Get user's information from JSONbin.io
 
-    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+    const response = await axios.get(`${JSONBIN_BASEUSER_URL}/latest`, {
       headers: {
         'secret-key': JSONBIN_API_KEY
       }
@@ -172,7 +174,7 @@ app.get('/getUsersInSameGroup', async (req, res) => {
       return res.status(401).send('User not logged in');
     }
 
-    const response = await axios.get(`${JSONBIN_BASE_URL}/latest`, {
+    const response = await axios.get(`${JSONBIN_BASEUSER_URL}/latest`, {
       headers: {
         'secret-key': JSONBIN_API_KEY
       }
@@ -195,6 +197,49 @@ app.get('/getUsersInSameGroup', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+
+
+app.post('/updateGroupLocation', async (req, res) => {
+  const { group, location } = req.body;
+
+  try {
+      // Fetch the current data from the bin
+      const currentData = await fetch(`${JSONBIN_BASEGROUP_URL}`, {
+          headers: {
+              'secret-key': JSONBIN_API_KEY
+          }
+      }).then(res => res.json());
+      console.log(currentData);
+
+      // Update the data with the new location
+      const groupData = currentData.groups.find(g => g.group === group);
+      if (groupData) {
+          groupData.locations.push(location);
+      } else {
+          // Handle the case where the group does not exist
+          return res.status(404).send({ message: 'Group not found' });
+      }
+
+      // Send the updated data back to the bin
+      await fetch(`${JSONBIN_BASEGROUP_URL}`, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+              'secret-key': JSONBIN_API_KEY
+          },
+          body: JSON.stringify(currentData)
+      });
+
+      res.send({ message: 'Location updated successfully' });
+  } catch (error) {
+      console.error('Error updating location:', error);
+      res.status(500).send({ message: 'Error updating location' });
+  }
+});
+
+
+
 
 
 

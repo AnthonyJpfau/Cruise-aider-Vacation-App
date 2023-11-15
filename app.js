@@ -23,6 +23,7 @@ fetch('/getGroup')
     groupElem.textContent = 'Error fetching group';
   });
 
+
   document.addEventListener('DOMContentLoaded', () => {
     fetch('/getUsersInSameGroup')
       .then(res => res.json())
@@ -114,69 +115,53 @@ function initMap() {
           position: event.latLng,
           map: map
       });
-
-      setTimeout(function() {
-          alert('You Marked a location at: ' + clickedLat + ', ' + clickedLng);
-      }, 50);
   });
 }
 
 // Add an event listener for the submit button
 document.getElementById('submitLocation').addEventListener('click', function() {
-    sendLocationToGroup(clickedLat, clickedLng);
-});
-
-/*
-function sendLocationToGroup(latitude, longitude) {
-  const binId = '6542ab390574da7622c0b78a'; // Replace with your JSONbin bin ID
-  const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o'; // Replace with your JSONbin API key
-  const apiUrl = `https://api.jsonbin.io/b/${binId}`;
-  const headers = {
-      'Content-Type': 'application/json',
-      'secret-key': apiKey,
-      'versioning': 'false'
-  };
-
-  // First, get the group associated with the logged-in user
+  // Fetch user's group
   fetch('/getGroup')
-  .then(res => res.text())
-  .then(userGroup => {
-      // Next, fetch the data from JSONbin
-      return fetch(apiUrl, { headers: headers })
-      .then(response => response.json())
-      .then(data => {
-          const groupToUpdate = data.groups.find(group => group.group === userGroup);
-          if (groupToUpdate) {
-              // Add the new location to the locations array for the group
-              const newLocation = `${latitude},${longitude}`;
-              groupToUpdate.locations.push(newLocation);
-
-              // Update the JSONbin with the new locations array
-              return fetch(apiUrl, {
-                  method: 'PUT',
-                  headers: headers,
-                  body: JSON.stringify(data)
-              });
-          } else {
-              throw new Error('Group not found.');
+      .then(res => res.text())
+      .then(userGroup => {
+          if (userGroup) {
+              // Assuming clickedLat and clickedLng are available globally
+              updateGroupLocation(userGroup, clickedLat, clickedLng);
           }
       })
-  })
-  .then(response => {
-      if (response.ok) {
-          alert('Location added to group successfully!');
-      } else {
-          alert('Failed to update the location.');
-      }
-  })
-  .catch(error => {
-    console.error('Detailed Error:', error.message); // Will print the error message to the console.
-    alert('An error occurred: ' + error.message);
-    console.error('Error retrieving group:', error.response || error);
+      .catch(error => {
+          console.error('Error fetching group:', error);
+          // Handle the error appropriately
+      });
 });
+
+function updateGroupLocation(userGroup, lat, lng) {
+  // Send the updated location to the server
+  const data = {
+      group: userGroup,
+      location: { lat: lat, lng: lng }
+  };
+
+  fetch('/updateGroupLocation', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log('Success:', data);
+      // Handle success response
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+      // Handle errors here
+  });
 }
 
-*/
+
+
 
 document.getElementById('zoomButton').addEventListener('click', () => {
   const stateName = document.getElementById('stateInput').value;
