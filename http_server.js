@@ -202,9 +202,9 @@ app.get('/getUsersInSameGroup', async (req, res) => {
 
 
 app.post('/updateGroupLocation', async (req, res) => {
-  const { group, location } = req.body;
+  const { group, location, username } = req.body;
   console.log('Received request:', req.body);
-  console.log('Received request for group:', group); // Log the requested group
+  console.log('Received request for group:', group);
 
   try {
       // Fetch the current group data from JSONBin
@@ -214,22 +214,22 @@ app.post('/updateGroupLocation', async (req, res) => {
           }
       });
 
-      const groups = response.data.record.groups;
+      console.log('JSONBin response:', response.data);
 
-      console.log('Fetched groups:', groups); // Log the fetched groups
+      // Access the 'groups' array inside the nested 'record' object
+      const groups = response.data.record.record.groups;
+
+      console.log('Fetched groups:', groups);
 
       if (Array.isArray(groups)) {
-          // Find the group and update its location
           const groupData = groups.find(g => g.group === group);
 
-          console.log('Group to update:', groupData); // Log the group to be updated
-
           if (groupData) {
-              groupData.locations.push(location);
+              groupData.locations.push({ ...location, submittedBy: username });
 
               // Send the updated data back to JSONBin
               await axios.put(`${JSONBIN_BASEGROUP_URL}`, {
-                  record: { groups: groups }
+                  record: { groups: groups }  // Update the 'record' object
               }, {
                   headers: {
                       'secret-key': JSONBIN_API_KEY,
@@ -248,16 +248,10 @@ app.post('/updateGroupLocation', async (req, res) => {
           res.status(500).send('Internal server error');
       }
   } catch (error) {
-      if (error.response) {
-          console.error('Response status:', error.response.status);
-          console.error('Response data:', error.response.data);
-      } else {
-          console.error('Request error:', error.message);
-      }
+      console.error('Error:', error);
       res.status(500).send('Internal server error');
   }
 });
-
 
 
 

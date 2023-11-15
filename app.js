@@ -120,27 +120,37 @@ function initMap() {
 
 // Add an event listener for the submit button
 document.getElementById('submitLocation').addEventListener('click', function() {
-  // Fetch user's group
-  fetch('/getGroup')
+  // First, fetch the username
+  fetch('/getUsername')
       .then(res => res.text())
-      .then(userGroup => {
-          if (userGroup) {
-              // Assuming clickedLat and clickedLng are available globally
-              updateGroupLocation(userGroup, clickedLat, clickedLng);
+      .then(username => {
+          if (username) {
+              // Then fetch the user's group
+              fetch('/getGroup')
+                  .then(res => res.text())
+                  .then(userGroup => {
+                      if (userGroup) {
+                          // Assuming clickedLat and clickedLng are available globally
+                          updateGroupLocation(userGroup, clickedLat, clickedLng, username);
+                      }
+                  })
+                  .catch(error => {
+                      console.error('Error fetching group:', error);
+                  });
           }
       })
       .catch(error => {
-          console.error('Error fetching group:', error);
-          // Handle the error appropriately
+          console.error('Error fetching username:', error);
       });
 });
 
-function updateGroupLocation(userGroup, lat, lng) {
+function updateGroupLocation(userGroup, lat, lng, username) {
   const data = {
       group: userGroup,
-      location: { lat: lat, lng: lng }
+      location: { lat: lat, lng: lng },
+      username: username  // Include the username in the data sent to the server
   };
-  console.log('Sending data:', data); // right before the fetch call
+  console.log('Sending data:', data);
 
   fetch('/updateGroupLocation', {
       method: 'POST',
