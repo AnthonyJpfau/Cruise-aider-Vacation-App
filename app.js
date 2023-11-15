@@ -140,6 +140,7 @@ function updateGroupLocation(userGroup, lat, lng) {
       group: userGroup,
       location: { lat: lat, lng: lng }
   };
+  console.log('Sending data:', data); // right before the fetch call
 
   fetch('/updateGroupLocation', {
       method: 'POST',

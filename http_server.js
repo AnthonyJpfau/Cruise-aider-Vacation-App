@@ -12,6 +12,7 @@ const JSONBIN_BASEGROUP_URL =`https://api.jsonbin.io/v3/b/6542ab390574da7622c0b7
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/'));
+app.use(express.json());
 
 app.use(session({
   secret: 'your-secret-key',
@@ -202,66 +203,60 @@ app.get('/getUsersInSameGroup', async (req, res) => {
 
 app.post('/updateGroupLocation', async (req, res) => {
   const { group, location } = req.body;
+  console.log('Received request:', req.body);
+  console.log('Received request for group:', group); // Log the requested group
 
   try {
-      // Fetch the current data from the bin
-      const response = await fetch(`${JSONBIN_BASEGROUP_URL}`, {
+      // Fetch the current group data from JSONBin
+      const response = await axios.get(`${JSONBIN_BASEGROUP_URL}/latest`, {
           headers: {
               'secret-key': JSONBIN_API_KEY
           }
       });
 
-      if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
-      }
+      const groups = response.data.record.groups;
 
-      const dataWrapper = await response.json();
+      console.log('Fetched groups:', groups); // Log the fetched groups
 
-      // Ensure the record and groups array exist
-      if (!dataWrapper.record || !Array.isArray(dataWrapper.record.groups)) {
-          return res.status(500).send({ message: 'Invalid or missing data' });
-      }
+      if (Array.isArray(groups)) {
+          // Find the group and update its location
+          const groupData = groups.find(g => g.group === group);
 
-      const groups = dataWrapper.record.groups;
+          console.log('Group to update:', groupData); // Log the group to be updated
 
-      // Find the group and update its locations
-      const groupData = groups.find(g => g.group === group);
-      if (groupData) {
-          groupData.locations.push(location);
+          if (groupData) {
+              groupData.locations.push(location);
+
+              // Send the updated data back to JSONBin
+              await axios.put(`${JSONBIN_BASEGROUP_URL}`, {
+                  record: { groups: groups }
+              }, {
+                  headers: {
+                      'secret-key': JSONBIN_API_KEY,
+                      'Content-Type': 'application/json'
+                  }
+              });
+
+              console.log('Location updated successfully');
+              res.send({ message: 'Location updated successfully' });
+          } else {
+              console.log('Group not found');
+              res.status(404).send({ message: 'Group not found' });
+          }
       } else {
-          return res.status(404).send({ message: 'Group not found' });
+          console.log('No group data found or unexpected data structure.');
+          res.status(500).send('Internal server error');
       }
-
-      // Prepare the updated data to be sent back
-      const updatedData = {
-          ...dataWrapper,
-          record: { ...dataWrapper.record, groups: groups }
-      };
-
-      // Send the updated data back to the bin
-      console.log('Updated data being sent:', updatedData);
-
-      const updateResponse = await fetch(`${JSONBIN_BASEGROUP_URL}`, {
-          method: 'PUT',
-          headers: {
-              'Content-Type': 'application/json',
-              'secret-key': JSONBIN_API_KEY
-          },
-          body: JSON.stringify(updatedData)
-      });
-      console.log('Update response:', await updateResponse.text());
-
-      if (!updateResponse.ok) {
-          throw new Error(`Error updating data: ${updateResponse.statusText}`);
-      }
-
-      res.send({ message: 'Location updated successfully' });
   } catch (error) {
-      console.error('Error:', error);
-      res.status(500).send({ message: 'Error updating location' });
+      if (error.response) {
+          console.error('Response status:', error.response.status);
+          console.error('Response data:', error.response.data);
+      } else {
+          console.error('Request error:', error.message);
+      }
+      res.status(500).send('Internal server error');
   }
 });
-
 
 
 
