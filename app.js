@@ -99,7 +99,10 @@ function initMap() {
   map.addListener('click', function(event) {
       clickedLat = event.latLng.lat();
       clickedLng = event.latLng.lng();
-      console.log(clickedLat, clickedLng);
+      
+      // Update the display for latitude and longitude
+      document.getElementById('displayLat').innerText = clickedLat;
+      document.getElementById('displayLng').innerText = clickedLng;
 
       // Remove the previous marker if it exists
       if (currentMarker) {
@@ -112,20 +115,18 @@ function initMap() {
           map: map
       });
 
-      // Add an event listener for marker clicks
-      currentMarker.addListener('click', function() {
-          const isConfirmed = confirm('Do you want to send this location to the group?');
-          if (isConfirmed) {
-              sendLocationToGroup(clickedLat, clickedLng); // Send the stored lat and lng
-          }
-      });
-
       setTimeout(function() {
           alert('You Marked a location at: ' + clickedLat + ', ' + clickedLng);
       }, 50);
   });
 }
 
+// Add an event listener for the submit button
+document.getElementById('submitLocation').addEventListener('click', function() {
+    sendLocationToGroup(clickedLat, clickedLng);
+});
+
+/*
 function sendLocationToGroup(latitude, longitude) {
   const binId = '6542ab390574da7622c0b78a'; // Replace with your JSONbin bin ID
   const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o'; // Replace with your JSONbin API key
@@ -175,7 +176,7 @@ function sendLocationToGroup(latitude, longitude) {
 });
 }
 
-
+*/
 
 document.getElementById('zoomButton').addEventListener('click', () => {
   const stateName = document.getElementById('stateInput').value;
