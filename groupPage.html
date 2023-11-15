@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Group</title>
     <link rel="stylesheet" href="styles.css"/>
-    <style> html {background-color: #82d1f3;} </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=initMap" async defer></script>
+    <style>
+        /* Set the map's height to fill the viewport */
+        #mapGroup {
+            height: 100vh;
+        }
+        html {background-color: #82d1f3;}
+        
+    </style>
 </head>
 <body>
 
@@ -17,8 +25,10 @@
 <div class="email"><ul id="groupMembers"></ul></div>
 <a href="mapPage.html">
    <div class ="returnButton"> <button>Return To Map page</button></a></div>
- </a>
+</a>
+<div id="mapGroup"></div>
 <script src="app.js"></script>
+<script>initMapGroup();</script>
 
 </body>
 </html>

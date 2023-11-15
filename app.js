@@ -173,7 +173,33 @@ function updateGroupLocation(userGroup, lat, lng, username) {
   });
 }
 
+function initMapGroup() {
+  mapGroup = new google.maps.Map(document.getElementById('mapGroup'), {
+      center: { lat: 39.8283, lng: -98.5795 }, // Center of the United States
+      zoom: 4 // Initial zoom level
+  });
 
+  // Event listener for mapGroup click
+  mapGroup.addListener('click', function(event) {
+      clickedLatGroup = event.latLng.lat();
+      clickedLngGroup = event.latLng.lng();
+      
+      // Update the display for latitude and longitude for mapGroup
+      document.getElementById('displayLatGroup').innerText = clickedLatGroup;
+      document.getElementById('displayLngGroup').innerText = clickedLngGroup;
+
+      // Remove the previous marker if it exists for mapGroup
+      if (currentMarkerGroup) {
+          currentMarkerGroup.setMap(null);
+      }
+
+      // Place a new marker at the clicked location for mapGroup
+      currentMarkerGroup = new google.maps.Marker({
+          position: event.latLng,
+          map: mapGroup
+      });
+  });
+}
 
 
 
