@@ -1,3 +1,27 @@
+function loadGoogleMapsAPI(callbackName) {
+  if (!window.google || !window.google.maps) {
+      var script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=${callbackName}`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+  } else {
+      if (typeof window[callbackName] === "function") {
+          window[callbackName]();
+      }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('map')) {
+      loadGoogleMapsAPI('initMap');
+  } else if (document.getElementById('mapGroup')) {
+      loadGoogleMapsAPI('initMapGroup');
+  }
+});
+
+
+
 fetch('/getUsername')
   .then(res => res.text())
   .then(data => {
@@ -64,36 +88,6 @@ fetch('/getGroup')
 
   
 // Create a function to load the Google Maps code
-function loadGoogleMap() {
-  // Create a <script> element for Google Maps API
-  var script = document.createElement('script');
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=initMap';
-  script.async = true;
-  script.defer = true;
-
-  // Define the callback function to initialize the map
-  script.onload = function() {
-      initMap();
-  };
-
-  // Append the <script> element to the document's <head>
-  document.head.appendChild(script);
-}
-
-// Call the function to load Google Maps when the page is loaded
-window.onload = loadGoogleMap;
-
-function loadGoogleMapGroup() {
-  // Create a <script> element for Google Maps API
-  var script = document.createElement('script');
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=initMapGroup'; // Specify the callback function for initMapGroup
-  script.async = true;
-  script.defer = true;
-
-  // Append the <script> element to the document's <head>
-  document.head.appendChild(script);
-}
-loadGoogleMapGroup();
 
 // Replace 'YOUR_API_KEY' with your actual Google Maps API key
 const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o';
@@ -193,25 +187,21 @@ function initMapGroup() {
       center: { lat: 39.8283, lng: -98.5795 },
       zoom: 4
   });
+
   // Ensure the map object is fully created
-  if (mapGroup) {
+  if (mapGroup instanceof google.maps.Map) {
       displayGroupLocations(mapGroup);
   } else {
       console.error('Map initialization failed');
   }
 }
 
-window.addEventListener("pageshow", function(event) {
-  if (event.persisted) {
-      // The page was restored from the cache
-      initMapGroup();
-  }
-});
 window.addEventListener("load", function(event) {
   initMapGroup();
 });
 
 function displayGroupLocations(map) {
+  console.log('Map instance in displayGroupLocations:', map);
   fetch('/getGroupLocations')
       .then(response => {
           if (!response.ok) {
@@ -224,7 +214,7 @@ function displayGroupLocations(map) {
               const position = { lat: location.lat, lng: location.lng };
               const marker = new google.maps.Marker({
                   position: position,
-                  map: mapGroup
+                  map: map
               });
 
               // Create an InfoWindow
