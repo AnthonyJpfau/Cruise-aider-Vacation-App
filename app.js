@@ -207,6 +207,9 @@ window.addEventListener("pageshow", function(event) {
       initMapGroup();
   }
 });
+window.addEventListener("load", function(event) {
+  initMapGroup();
+});
 
 function displayGroupLocations(map) {
   fetch('/getGroupLocations')
@@ -221,7 +224,7 @@ function displayGroupLocations(map) {
               const position = { lat: location.lat, lng: location.lng };
               const marker = new google.maps.Marker({
                   position: position,
-                  map: map
+                  map: mapGroup
               });
 
               // Create an InfoWindow
