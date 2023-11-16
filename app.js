@@ -174,12 +174,13 @@ function updateGroupLocation(userGroup, lat, lng, username) {
   })
   .then(data => {
       console.log('Response:', data);
+      // Display a popup message once the location is successfully sent
+      alert('Location sent to your group!');
   })
   .catch((error) => {
       console.error('Fetch error:', error);
   });
 }
-
 
 
 function initMapGroup() {
