@@ -83,7 +83,17 @@ function loadGoogleMap() {
 // Call the function to load Google Maps when the page is loaded
 window.onload = loadGoogleMap;
 
+function loadGoogleMapGroup() {
+  // Create a <script> element for Google Maps API
+  var script = document.createElement('script');
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=initMapGroup'; // Specify the callback function for initMapGroup
+  script.async = true;
+  script.defer = true;
 
+  // Append the <script> element to the document's <head>
+  document.head.appendChild(script);
+}
+loadGoogleMapGroup();
 
 // Replace 'YOUR_API_KEY' with your actual Google Maps API key
 const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o';
@@ -183,16 +193,21 @@ function initMapGroup() {
       center: { lat: 39.8283, lng: -98.5795 },
       zoom: 4
   });
-
-  // After initializing the map, display the group locations
-  displayGroupLocations(mapGroup);
+  // Ensure the map object is fully created
+  if (mapGroup) {
+      displayGroupLocations(mapGroup);
+  } else {
+      console.error('Map initialization failed');
+  }
 }
+
 window.addEventListener("pageshow", function(event) {
   if (event.persisted) {
       // The page was restored from the cache
       initMapGroup();
   }
 });
+
 function displayGroupLocations(map) {
   fetch('/getGroupLocations')
       .then(response => {
@@ -203,9 +218,20 @@ function displayGroupLocations(map) {
       })
       .then(locations => {
           locations.forEach(location => {
-              new google.maps.Marker({
-                  position: location,
+              const position = { lat: location.lat, lng: location.lng };
+              const marker = new google.maps.Marker({
+                  position: position,
                   map: map
+              });
+
+              // Create an InfoWindow
+              const infoWindow = new google.maps.InfoWindow({
+                  content: `<div>Submitted by: ${location.submittedBy}</div>`
+              });
+
+              // Add a click listener to the marker to open the InfoWindow
+              marker.addListener('click', () => {
+                  infoWindow.open(map, marker);
               });
           });
       })

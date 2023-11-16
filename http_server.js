@@ -254,18 +254,20 @@ app.post('/updateGroupLocation', async (req, res) => {
 });
 
 app.get('/getGroupLocations', async (req, res) => {
+  console.log("Received request for group locations");
   try {
       // Check if user is logged in
       if (!req.session.username) {
           return res.status(401).send('User not logged in');
       }
-
+      console.log("User logged in with username: ", req.session.username);
       // Get user's information from JSONbin.io
       const userResponse = await axios.get(`${JSONBIN_BASEUSER_URL}/latest`, {
           headers: {
               'secret-key': JSONBIN_API_KEY
           }
       });
+      console.log("User data response: ", userResponse.data);
 
       const userData = userResponse.data;
       const userArray = userData.record.users; 
@@ -282,7 +284,7 @@ app.get('/getGroupLocations', async (req, res) => {
               'secret-key': JSONBIN_API_KEY
           }
       });
-
+      console.log("Group data response: ", groupResponse.data);
       // Adjusted to correctly access the groups array
       const groupData = groupResponse.data.record.record.groups;
       console.log("Groups array:", groupData);
@@ -294,6 +296,7 @@ app.get('/getGroupLocations', async (req, res) => {
       }
 
       // Send the locations of the user's group to the client
+      console.log("Sending locations for group: ", userGroup.locations);
       res.json(userGroup.locations);
   } catch (error) {
       console.error('Error retrieving group locations:', error);
