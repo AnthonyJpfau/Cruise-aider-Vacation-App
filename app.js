@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
   } else if (document.getElementById('mapGroup')) {
       loadGoogleMapsAPI('initMapGroup');
   }
+  document.getElementById('commentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const comment = document.getElementById('userComment').value;
+    submitComment(comment);
+});
 });
 
 
@@ -237,6 +242,26 @@ function displayGroupLocations(map) {
       });
 }
 
+function submitComment(comment) {
+  // Fetch the username
+  fetch('/getUsername')
+      .then(response => response.text()) // Handle the response as text
+      .then(username => {
+          // Rest of your logic...
+          fetch('/getGroup')
+              .then(res => res.text())
+              .then(userGroup => {
+                  fetch('/submit-comment', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ comment: comment, group: userGroup, username: username })
+                  })
+                  // ... rest of the existing fetch logic ...
+              })
+              .catch(error => console.error('Error fetching user group:', error));
+      })
+      .catch(error => console.error('Error fetching username:', error));
+}
 
 document.getElementById('zoomButton').addEventListener('click', () => {
   const stateName = document.getElementById('stateInput').value;
@@ -253,5 +278,5 @@ document.getElementById('zoomButton').addEventListener('click', () => {
   });
 });
 
-  
+
   

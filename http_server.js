@@ -306,6 +306,43 @@ app.get('/getGroupLocations', async (req, res) => {
   }
 });
 
+app.post('/submit-comment', async (req, res) => {
+  const { comment, group, username } = req.body;
+
+  try {
+      const groupDataResponse = await axios.get(`${JSONBIN_BASEGROUP_URL}/latest`, {
+          headers: { 'secret-key': JSONBIN_API_KEY },
+      });
+
+      // Check the structure of the response
+      if (!groupDataResponse.data || !groupDataResponse.data.record || !groupDataResponse.data.record.record || !Array.isArray(groupDataResponse.data.record.record.groups)) {
+          console.error("Invalid structure in group data response:", groupDataResponse.data);
+          return res.status(500).send("Invalid data structure in group data response");
+      }
+
+      const groups = groupDataResponse.data.record.record.groups;
+      const groupIndex = groups.findIndex(g => g.group === group);
+
+      if (groupIndex === -1) {
+          console.error("Group not found in JSONBin:", group);
+          return res.status(400).send("Group not found");
+      }
+
+      // Create a comment object with text and the username
+      const commentObject = { text: comment, submittedBy: username };
+      groups[groupIndex].comments.push(commentObject);
+
+      // Update the JSONBin with the new groups data
+      await axios.put(`${JSONBIN_BASEGROUP_URL}`, { record: { groups: groups } }, {
+          headers: { 'secret-key': JSONBIN_API_KEY, 'Content-Type': 'application/json' },
+      });
+
+      res.status(200).send("Comment submitted");
+  } catch (error) {
+      console.error("Error in /submit-comment:", error);
+      res.status(500).send("Error submitting comment");
+  }
+});
 
 
 app.get('/logout', (req, res) => {
