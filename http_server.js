@@ -225,6 +225,7 @@ app.post('/updateGroupLocation', async (req, res) => {
           const groupData = groups.find(g => g.group === group);
 
           if (groupData) {
+              // Include the locationId in the location object
               groupData.locations.push({ ...location, submittedBy: username });
 
               // Send the updated data back to JSONBin
@@ -252,6 +253,7 @@ app.post('/updateGroupLocation', async (req, res) => {
       res.status(500).send('Internal server error');
   }
 });
+
 
 app.get('/getGroupLocations', async (req, res) => {
   console.log("Received request for group locations");

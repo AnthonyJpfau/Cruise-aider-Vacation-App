@@ -152,9 +152,12 @@ document.getElementById('submitLocation').addEventListener('click', function() {
 });
 
 function updateGroupLocation(userGroup, lat, lng, username) {
+  // Generate a unique location ID
+  const locationId = Date.now() + Math.floor(Math.random() * 1000);
+
   const data = {
       group: userGroup,
-      location: { lat: lat, lng: lng },
+      location: { lat: lat, lng: lng, locationId: locationId },
       username: username  // Include the username in the data sent to the server
   };
   console.log('Sending data:', data);
