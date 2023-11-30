@@ -8,7 +8,7 @@
     <style>
         /* Set the map's height to fill the viewport */
         #mapGroup {
-            height: 100vh;
+            height: 350px;
         }
         html {background-color: #82d1f3;}
         
@@ -19,24 +19,31 @@
 <!-- Display User Group -->
 <div class="groupMessage"><h2>Logged in as <div id="username"> </div></h2></div>
 <h3><div id="userGroup"></div></h3>
-<h5>Members in your group:</h5>
-<div class="username"><ul id="groupMembers"></ul></div>
-<div class="email"><ul id="groupMembers"></ul></div>
-<div class="comments-section">
-    <h3>Comments</h3>
-    <div id="commentsDisplay"></div>
+<div class="box-container">
+    <div class="box1">
+        <h5>Members in your group:</h5>
+        <div class="username"><ul id="groupMembers"></ul></div>
+        <div class="email"><ul id="groupMembers"></ul></div>
+        <div class="comments-section">
+            <h3>Comments</h3>
+            <div id="commentsDisplay"></div>
+        </div>
+        <div class="comment-form">
+        <h3>Leave a Comment</h3>
+        <form id="commentForm">
+            <textarea id="userComment" placeholder="Your comment here..." required></textarea>
+            <button type="submit">Submit Comment</button>
+        </form>
+        </div>
+    </div>
+
+    <div class="box2">
+        <a href="mapPage.html">
+        <div class ="returnButton"> <button>Return To Map page</button></a></div>
+        </a>
+        <div id="mapGroup"></div>
+    </div>
 </div>
-<div class="comment-form">
-    <h3>Leave a Comment</h3>
-    <form id="commentForm">
-        <textarea id="userComment" placeholder="Your comment here..." required></textarea>
-        <button type="submit">Submit Comment</button>
-    </form>
-</div>
-<a href="mapPage.html">
-   <div class ="returnButton"> <button>Return To Map page</button></a></div>
-</a>
-<div id="mapGroup" style="height: 400px; width: 100%;"></div>
 <script src="app.js"></script>
 
 </body>

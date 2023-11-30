@@ -8,7 +8,7 @@
     <style>
         /* Set the map's height to fill the viewport */
         #map {
-            height: 100vh;
+            height: 80vh;
         }
         html {background-color: #82d1f3;}
         
@@ -17,27 +17,30 @@
 <body>
 
   <div class="welcomeMessage"><h2>Welcome to the vacation app, <div id="username"> </div></h2></div>
-
-  <div class="Quicklink-container">
-    <h3><a href="groupPage.html"><button>Groups</button></a></h3>
-    <h3><a href="schedulePage.html"><button>Recommended Locations</button></a></h3>
+<div class="homeBox-container">
+  <div class="homeBox1">
+    <div class="Quicklink-container">
+    <h3><a href="groupPage.html"><button>Your Group</button></a></h3>
     </div>
 
-  <div class="State-zoom-container">
-    <h3>Zoom to U.S. State</h3>
-    <label for="stateInput">Enter a U.S. state:</label>
-    <input type="text" id="stateInput" placeholder="E.g., California">
-    <button id="zoomButton">Zoom to State</button>
-  </div>
+    <div class="State-zoom-container">
+      <h3>Zoom to U.S. State</h3>
+      <label for="stateInput">Enter a U.S. state:</label>
+      <input type="text" id="stateInput" placeholder="E.g., California">
+      <button id="zoomButton">Zoom to State</button>
+    </div>
 
-  <div id="locationDisplay">
-    <h3>Marked Location:</h3>
-    <p>Latitude: <span id="displayLat">0</span></p>
-    <p>Longitude: <span id="displayLng">0</span></p>
-    <button id="submitLocation">Submit Location</button>
+    <div id="locationDisplay">
+      <h3>Marked Location:</h3>
+      <p>Latitude: <span id="displayLat">0</span></p>
+      <p>Longitude: <span id="displayLng">0</span></p>
+      <button id="submitLocation">Submit Location</button>
+    </div>
   </div>
-
+  <div class="homeBox2">
   <div id="map"></div>
+  </div>
+</div>
   <script src="app.js"></script>
 </body>
 </html>

@@ -54,3 +54,38 @@
 .email{
     color: #f36d6d;
 }
+
+.comments-section {
+    
+}
+
+.comment-form{
+    
+}
+
+.box-container {
+    display: flex; /* Use flexbox */
+    justify-content: space-between;
+}
+
+.homeBox-container {
+    display: flex; /* Use flexbox */
+    justify-content: space-between;
+}
+
+.box1 {
+    flex: 1;
+}
+
+.box2 {
+    flex: 1;
+}
+
+.homeBox1 {
+    flex: 1;
+}
+
+.homeBox2 {
+    flex: 1;
+}
+
