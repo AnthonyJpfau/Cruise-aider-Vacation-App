@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const comment = document.getElementById('userComment').value;
     submitComment(comment);
 });
+fetchAndDisplayComments();
 });
 
 
@@ -154,6 +155,8 @@ document.getElementById('submitLocation').addEventListener('click', function() {
       .catch(error => {
           console.error('Error fetching username:', error);
       });
+
+      
 });
 
 function updateGroupLocation(userGroup, lat, lng, username) {
@@ -261,6 +264,46 @@ function submitComment(comment) {
               .catch(error => console.error('Error fetching user group:', error));
       })
       .catch(error => console.error('Error fetching username:', error));
+}
+
+function fetchAndDisplayComments() {
+  fetch('/fetch-comments')
+      .then(response => {
+          // Check if the response is OK (status in the range 200-299)
+          if (!response.ok) {
+              // If not OK, handle it as a text response
+              return response.text().then(text => { throw new Error(text) });
+          }
+          // If OK, parse it as JSON
+          return response.json();
+      })
+      .then(comments => {
+          const commentsDisplay = document.getElementById('commentsDisplay');
+          commentsDisplay.innerHTML = ''; // Clear existing comments
+
+          comments.forEach(comment => {
+              const commentElement = document.createElement('div');
+              commentElement.classList.add('comment');
+
+              const textElement = document.createElement('p');
+              textElement.textContent = comment.text;
+
+              const userElement = document.createElement('p');
+              userElement.textContent = `Submitted by: ${comment.submittedBy}`;
+              userElement.classList.add('comment-user');
+
+              commentElement.appendChild(textElement);
+              commentElement.appendChild(userElement);
+
+              commentsDisplay.appendChild(commentElement);
+          });
+      })
+      .catch(error => {
+          console.error('Error fetching comments:', error);
+          // Optionally, update the UI to show an error message
+          const commentsDisplay = document.getElementById('commentsDisplay');
+          commentsDisplay.innerHTML = `<p>Error: ${error.message}</p>`;
+      });
 }
 
 document.getElementById('zoomButton').addEventListener('click', () => {

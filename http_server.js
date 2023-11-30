@@ -44,6 +44,7 @@ app.post('/login', async (req, res) => {
       if (user) {
         // User exists, store the username in the session
         req.session.username = username;
+        req.session.userGroup = user.group;
         console.log('Login successful');
         res.redirect('/mapPage.html');
       } else {
@@ -343,6 +344,46 @@ app.post('/submit-comment', async (req, res) => {
       res.status(500).send("Error submitting comment");
   }
 });
+
+app.get('/fetch-comments', async (req, res) => {
+  // Retrieve userGroup from the session
+  const userGroup = req.session.userGroup;
+
+  // Logging after userGroup is defined
+  console.log("User Group from session:", userGroup);
+
+  if (!userGroup) {
+      console.error("User group not found in session");
+      return res.status(400).send("User group not found");
+  }
+
+  try {
+      const groupDataResponse = await axios.get(`${JSONBIN_BASEGROUP_URL}/latest`, {
+          headers: { 'secret-key': JSONBIN_API_KEY },
+      });
+
+      // Check if the groups data is structured correctly
+      if (!groupDataResponse.data || !groupDataResponse.data.record || !groupDataResponse.data.record.record || !Array.isArray(groupDataResponse.data.record.record.groups)) {
+          console.error("Invalid structure in group data response:", groupDataResponse.data);
+          return res.status(500).send("Invalid data structure in group data response");
+      }
+
+      const groups = groupDataResponse.data.record.record.groups;
+      const group = groups.find(g => g.group === userGroup);
+
+      if (!group) {
+          console.error("Group not found in JSONBin:", userGroup);
+          return res.status(400).send("Group not found");
+      }
+
+      // Send the comments of the found group
+      res.json(group.comments || []);
+  } catch (error) {
+      console.error("Error in /fetch-comments:", error);
+      res.status(500).send("Error fetching comments");
+  }
+});
+
 
 
 app.get('/logout', (req, res) => {
