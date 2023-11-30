@@ -267,43 +267,35 @@ function submitComment(comment) {
 }
 
 function fetchAndDisplayComments() {
-  fetch('/fetch-comments')
-      .then(response => {
-          // Check if the response is OK (status in the range 200-299)
-          if (!response.ok) {
-              // If not OK, handle it as a text response
-              return response.text().then(text => { throw new Error(text) });
-          }
-          // If OK, parse it as JSON
-          return response.json();
-      })
-      .then(comments => {
-          const commentsDisplay = document.getElementById('commentsDisplay');
-          commentsDisplay.innerHTML = ''; // Clear existing comments
+    fetch('/fetch-comments')
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text) });
+            }
+            return response.json();
+        })
+        .then(comments => {
+            const commentsDisplay = document.getElementById('commentsDisplay');
+            commentsDisplay.innerHTML = ''; // Clear existing comments
 
-          comments.forEach(comment => {
-              const commentElement = document.createElement('div');
-              commentElement.classList.add('comment');
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
 
-              const textElement = document.createElement('p');
-              textElement.textContent = comment.text;
+                // Combine the username and comment text in one element
+                const combinedCommentElement = document.createElement('p');
+                combinedCommentElement.textContent = `${comment.submittedBy}: ${comment.text}`;
+                combinedCommentElement.classList.add('combined-comment');
 
-              const userElement = document.createElement('p');
-              userElement.textContent = `Submitted by: ${comment.submittedBy}`;
-              userElement.classList.add('comment-user');
-
-              commentElement.appendChild(textElement);
-              commentElement.appendChild(userElement);
-
-              commentsDisplay.appendChild(commentElement);
-          });
-      })
-      .catch(error => {
-          console.error('Error fetching comments:', error);
-          // Optionally, update the UI to show an error message
-          const commentsDisplay = document.getElementById('commentsDisplay');
-          commentsDisplay.innerHTML = `<p>Error: ${error.message}</p>`;
-      });
+                commentElement.appendChild(combinedCommentElement);
+                commentsDisplay.appendChild(commentElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching comments:', error);
+            const commentsDisplay = document.getElementById('commentsDisplay');
+            commentsDisplay.innerHTML = `<p>Error: ${error.message}</p>`;
+        });
 }
 
 document.getElementById('zoomButton').addEventListener('click', () => {
