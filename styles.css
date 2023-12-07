@@ -2,7 +2,6 @@
     width: 350px;
     height: 100px;
     margin: 20px 0;
-    background-color: darkgray;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,18 +12,6 @@
     width: 350px;
     height: 40px;
     margin: 20px 0;
-    background-color: azure;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid black;
-}
-
-.homepageDisplay {
-    width: 500px;
-    height: 200px;
-    margin: 20px 0;
-    background-color: darkgray;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,15 +19,33 @@
 }
 
 .welcomeMessage {
+    display: inline-block; /* Makes the div only as wide as its content */
+    padding: 10px; /* Adds space inside the box around the content */
+    margin: 10px; /* Adds space outside the box */
+    background-color: #3a8dad; /* A darker shade of blue for the background */
     text-shadow: 5px 5px 14px #000000;
     color: #ffffff;
     text-align: center;
+    border-radius: 5px; /* Optional: rounds the corners of the box */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
 }
 
 .groupMessage {
+    font-family: 'Roboto', sans-serif;
+    display: inline-block; /* Makes the div only as wide as its content */
+    padding: 10px; /* Adds space inside the box around the content */
+    margin: 10px; /* Adds space outside the box */
+    background-color: #3a8dad; /* A darker shade of blue for the background */
     text-shadow: 5px 5px 14px #000000;
     color: #ffffff;
-    text-align: right;  
+    text-align: right;
+    border-radius: 5px; /* Optional: rounds the corners of the box */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+    
 }
 
 .returnButton{
@@ -64,28 +69,234 @@
 }
 
 .box-container {
+    font-family: 'Roboto', sans-serif;
     display: flex; /* Use flexbox */
     justify-content: space-between;
+    align-items: stretch; /* Align children vertically */
+    height: 80vh;
 }
 
 .homeBox-container {
     display: flex; /* Use flexbox */
     justify-content: space-between;
-}
-
-.box1 {
-    flex: 1;
-}
-
-.box2 {
-    flex: 1;
+    align-items: stretch; /* Align children vertically */
+    height: 80vh; /* Set a height for the container */
 }
 
 .homeBox1 {
-    flex: 1;
+    display: inline-block; /* Makes the div only as wide as its content */
+    padding: 10px; /* Adds space inside the box around the content */
+    margin: 10px; /* Adds space outside the box */
+    background-color: #3a8dad; /* A darker shade of blue for the background */
+    text-shadow: 5px 5px 14px #000000;
+    color: #ffffff;
+    text-align: left;
+    border-radius: 5px; /* Optional: rounds the corners of the box */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
 }
 
 .homeBox2 {
-    flex: 1;
+    flex-grow: 1; /* Grow to take up the remaining space */
+    /* flex-basis: 0; Implicitly set to 0 if not specified */
+    /* Ensure no margin or padding is pushing the map out of its container */
+    border: 1px solid black;
 }
 
+#map {
+    width: 100%; /* Set the map width to fill its container */
+    height: 100%; /* Set the map height to fill its container */
+}
+
+#mapGroup {
+    width: 100%; /* Set the map width to fill its container */
+    height: 100%; /* Set the map height to fill its container */
+    border: 1px solid black;
+}
+
+
+.box1 {
+    display: inline-block; /* Makes the div only as wide as its content */
+    padding: 10px; /* Adds space inside the box around the content */
+    margin: 10px; /* Adds space outside the box */
+    background-color: #3a8dad; /* A darker shade of blue for the background */
+    text-shadow: 5px 5px 14px #000000;
+    color: #ffffff;
+    text-align: left;
+    border-radius: 5px; /* Optional: rounds the corners of the box */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+}
+
+.box2 {
+    flex-grow: 1;
+}
+
+.userGroup {
+    
+}
+
+.homepageDisplay {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin: 20px;
+    float: center;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+
+.homepageDisplay h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+  
+.homepageDisplay button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3a8dad;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    display: block; /* Make the buttons block to fill the width */
+}
+  
+.homepageDisplay button:hover {
+    background-color: #297a9d;
+}
+  
+.homepageDisplay a {
+    text-decoration: none;
+    color: #3a8dad;
+    margin-top: 15px;
+    display: block; /* This will ensure the anchor tag behaves like a block element */
+}
+  
+.homepageDisplay a:first-child {
+    margin-top: 0;
+}
+
+.login-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 100%;
+    margin: 20px;
+    float: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .login-container h2 {
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .login-container label {
+    display: block;
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  .login-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  .login-container button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3a8dad;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .login-container button:hover {
+    background-color: #297a9d;
+  }
+  
+  .login-container a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #3a8dad;
+    text-decoration: none;
+  }
+  
+  .login-container a:hover {
+    text-decoration: underline;
+  }
+
+  .form-container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 100%;
+    margin: 20px;
+    float: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .form-container h1 {
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .form-container label {
+    display: block;
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  .form-container input[type="text"],
+  .form-container input[type="password"],
+  .form-container input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+  
+  .form-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3a8dad;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .form-container input[type="submit"]:hover {
+    background-color: #297a9d;
+  }
+
+
+  

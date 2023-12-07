@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register User</title>
   <style> html {background-color: #82d1f3;} </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Add a new account to Vacation App</h1>
-  <form action="/register" method="POST">
+  <div class="form-container">
+    <h1>Add a new account to Vacation App</h1>
+    <form action="/register" method="POST">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required>
     <br>
@@ -19,7 +21,8 @@
     <input type="email" id="email" name="email" required>
     <br>
     <input type="submit" value="Submit">
-  </form>
+    </form>
+  </div>
  
 </body>
 </html>
