@@ -1,7 +1,7 @@
 function loadGoogleMapsAPI(callbackName) {
   if (!window.google || !window.google.maps) {
       var script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o&callback=${callbackName}`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=REPLACE_API_KEY_HERE&callback=${callbackName}`;
       script.async = true;
       script.defer = true;
       document.head.appendChild(script);
@@ -96,7 +96,7 @@ fetch('/getGroup')
 // Create a function to load the Google Maps code
 
 // Replace 'YOUR_API_KEY' with your actual Google Maps API key
-const apiKey = 'KAIzaSyDueM6P1BJmPhKC2Cp5jl6ufGPHMA4XC9o';
+const apiKey = REPLACE_API_KEY_HERE
 
 let map;
 let mapGroup;
