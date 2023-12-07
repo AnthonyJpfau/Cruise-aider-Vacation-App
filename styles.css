@@ -31,7 +31,37 @@
     border: 1px solid black;
     justify-content: center;
     align-items: center;
+    flex-grow: 1; /* Allow it to grow as needed */
+  text-align: center;
 }
+
+.banner-container {
+  display: flex; /* Enable Flexbox */
+  align-items: center; /* Align items vertically in the center */
+  justify-content: space-around; /* Space out the items evenly */
+}
+
+
+/* Style for the image container */
+.image-container {
+  width: 800px; /* Fixed width */
+  height: 180px; /* Fixed height */
+  text-align: center; /* Center the image */
+  margin-top: 20px; /* Add some space at the top */
+  border: 1px solid black; /* Optional border */
+  overflow: hidden;
+}
+
+
+
+/* Style for the image itself */
+.image-container img {
+  width: 100%; /* Width of the image to 100% of its container */
+  height: 100%; /* Height of the image to 100% of its container */
+  object-fit: cover; /* This will cover the div area, cropping the image if necessary */
+  border: 1px solid black; /* Optional border */
+}
+
 
 .groupMessage {
     font-family: 'Roboto', sans-serif;
@@ -45,6 +75,7 @@
     border-radius: 5px; /* Optional: rounds the corners of the box */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     border: 1px solid black;
+    height: 75%;
     
 }
 
@@ -72,8 +103,9 @@
     font-family: 'Roboto', sans-serif;
     display: flex; /* Use flexbox */
     justify-content: space-between;
-    align-items: stretch; /* Align children vertically */
-    height: 80vh;
+    align-items: start; /* Align children vertically */
+    height: auto;
+    margin-bottom: 20px;
 }
 
 .homeBox-container {
@@ -110,7 +142,8 @@
 
 #mapGroup {
     width: 100%; /* Set the map width to fill its container */
-    height: 100%; /* Set the map height to fill its container */
+    height: auto;
+    object-fit: cover; /* Set the map height to fill its container */
     border: 1px solid black;
 }
 
@@ -126,10 +159,12 @@
     border-radius: 5px; /* Optional: rounds the corners of the box */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     border: 1px solid black;
+    flex: 1;
 }
 
 .box2 {
-    flex-grow: 1;
+  flex: 1;
+  margin: 10px;
 }
 
 .userGroup {
@@ -298,5 +333,42 @@
     background-color: #297a9d;
   }
 
+  .returnButton {
+    text-align: center; /* Center the button */
+    margin-top: 10px; /* Space above the button */
+}
 
-  
+/* Adjust button styling as needed */
+.returnButton button {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #3a8dad;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    width: 130px;
+    height: 30px;
+    float: right;
+  /* Full width of its container */
+}
+
+.top-row {
+  display: flex;
+    align-items: stretch; /* Align the tops of the children */
+    justify-content: space-between;
+  height: 140px;
+}
+
+.group-container {
+  display: inline-block; /* Makes the div only as wide as its content */
+    padding: 10px; /* Adds space inside the box around the content */
+    margin: 10px; /* Adds space outside the box */
+    background-color: #3a8dad; /* A darker shade of blue for the background */
+    text-shadow: 5px 5px 14px #000000;
+    color: #ffffff;
+    text-align: left;
+    border-radius: 5px; /* Optional: rounds the corners of the box */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
+   
+}
