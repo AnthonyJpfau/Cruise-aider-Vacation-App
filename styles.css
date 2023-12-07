@@ -64,24 +64,21 @@
 
 
 .groupMessage {
-    font-family: 'Roboto', sans-serif;
-    display: inline-block; /* Makes the div only as wide as its content */
-    padding: 10px; /* Adds space inside the box around the content */
-    margin: 10px; /* Adds space outside the box */
-    background-color: #3a8dad; /* A darker shade of blue for the background */
-    text-shadow: 5px 5px 14px #000000;
-    color: #ffffff;
-    text-align: right;
-    border-radius: 5px; /* Optional: rounds the corners of the box */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    border: 1px solid black;
-    height: 75%;
+  display: inline-block;
+  padding: 10px; /* Keep the padding to ensure there's space around the text */
+  margin: 10px; /* Adjust the margin as needed */
+  background-color: #3a8dad; /* A darker shade of blue for the background */
+  text-shadow: 5px 5px 14px #000000; /* Shadow for the text */
+  color: #ffffff; /* Text color */
+  text-align: center; /* Center the text within the div */
+  border-radius: 5px; /* Rounds the corners of the box */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for the box */
+  border: 1px solid black;
+  height: 70px;
     
 }
 
-.returnButton{
-    text-align: right;
-}
+
 
 .username{
     color: White
@@ -109,6 +106,7 @@
 }
 
 .homeBox-container {
+  font-family: 'Roboto', sans-serif;
     display: flex; /* Use flexbox */
     justify-content: space-between;
     align-items: stretch; /* Align children vertically */
@@ -116,6 +114,7 @@
 }
 
 .homeBox1 {
+  font-family: 'Roboto', sans-serif;
     display: inline-block; /* Makes the div only as wide as its content */
     padding: 10px; /* Adds space inside the box around the content */
     margin: 10px; /* Adds space outside the box */
@@ -149,6 +148,7 @@
 
 
 .box1 {
+  font-family: 'Roboto', sans-serif;
     display: inline-block; /* Makes the div only as wide as its content */
     padding: 10px; /* Adds space inside the box around the content */
     margin: 10px; /* Adds space outside the box */
@@ -172,6 +172,7 @@
 }
 
 .homepageDisplay {
+  font-family: 'Roboto', sans-serif;
     text-align: center;
     background-color: #ffffff;
     padding: 40px;
@@ -192,6 +193,7 @@
 }
   
 .homepageDisplay button {
+  font-family: 'Roboto', sans-serif;
     width: 100%;
     padding: 10px;
     margin-top: 10px;
@@ -220,6 +222,7 @@
 }
 
 .login-container {
+  font-family: 'Roboto', sans-serif;
     text-align: center;
     background-color: #ffffff;
     padding: 40px;
@@ -254,6 +257,7 @@
   }
   
   .login-container button {
+    font-family: 'Roboto', sans-serif;
     width: 100%;
     padding: 10px;
     margin-top: 20px;
@@ -282,6 +286,7 @@
   }
 
   .form-container {
+    font-family: 'Roboto', sans-serif;
     text-align: center;
     background-color: #ffffff;
     padding: 40px;
@@ -334,35 +339,41 @@
   }
 
   .returnButton {
-    text-align: center; /* Center the button */
-    margin-top: 10px; /* Space above the button */
+    display: inline-flex; /* Use inline-flex to fit the width to its content */
+    align-items: center; /* Center align the button vertically */
+    justify-content: center; /* Center align the button horizontally */
+    margin: 10px;
+    margin-left: auto;
 }
 
 /* Adjust button styling as needed */
 .returnButton button {
-    padding: 10px;
+  font-family: 'Roboto', sans-serif;
+  padding: 10px; /* Add padding for the button for better click area */
     border-radius: 5px;
     background-color: #3a8dad;
     color: white;
+    text-align: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid black;
     cursor: pointer;
     font-size: 16px;
-    width: 130px;
-    height: 30px;
-    float: right;
+    margin-left: auto;
   /* Full width of its container */
 }
 
 .top-row {
   display: flex;
-    align-items: stretch; /* Align the tops of the children */
+    align-items: center; /* This will vertically center the children */
     justify-content: space-between;
   height: 140px;
 }
 
 .group-container {
+  font-family: 'Roboto', sans-serif;
   display: inline-block; /* Makes the div only as wide as its content */
     padding: 10px; /* Adds space inside the box around the content */
-    margin: 10px; /* Adds space outside the box */
+    margin: 2px; /* Adds space outside the box */
     background-color: #3a8dad; /* A darker shade of blue for the background */
     text-shadow: 5px 5px 14px #000000;
     color: #ffffff;
@@ -370,5 +381,7 @@
     border-radius: 5px; /* Optional: rounds the corners of the box */
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     border: 1px solid black;
+    float: left;
+    height: 70px;
    
 }
